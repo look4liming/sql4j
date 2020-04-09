@@ -1,0 +1,77 @@
+<boolean value expression>    ::= 
+	<boolean term> {  OR  <boolean term>   }...
+
+<boolean term>    ::= 
+	<boolean factor> {  AND  <boolean factor>   }...
+
+<boolean factor>    ::=   
+	[  NOT  ] <boolean test>
+
+<boolean test>    ::=   
+	<boolean primary> [  IS  [  NOT  ] <truth value> ]
+
+<boolean primary>    ::= 
+	<predicate> |
+	<left paren> <boolean value expression> <right paren>
+
+<predicate>    ::= 
+	<comparison predicate> |
+	<between predicate> |
+	<in predicate> |
+	<like predicate> |
+	<null predicate> |
+	<quantified comparison predicate> |
+	<exists predicate> |
+	<unique predicate> |
+	<match predicate> |
+	<overlaps predicate> |
+	<similar predicate> |
+	<distinct predicate>
+
+<comparison predicate>    ::=
+	<value expression> <comp op> <value expression>
+
+<comp op>    ::= 
+	<equals operator> |
+	<not equals operator> |
+	<less than operator>|
+	<greater than operator> |
+	<less than or equals operator> |
+	<greater than or equals operator>
+
+<between predicate>    ::= 
+	<value expression> [  NOT  ]  BETWEEN  [  ASYMMETRIC  |  SYMMETRIC  ] <value expression>  AND  <value expression>
+
+<in predicate>    ::=   
+	<value expression> [  NOT  ]  IN  <in predicate value>
+
+<in predicate value>    ::=   
+	<table subquery> | 
+	<left paren> <in value list> <right paren>
+
+<like predicate>    ::=
+	<character match value> [  NOT  ]  LIKE  <character pattern> [  ESCAPE  <escape character> ]
+
+<null predicate>    ::=
+	<value expression>  IS  [  NOT  ]  NULL
+
+<quantified comparison predicate>    ::=
+	<value expression> <comp op> <quantifier> <table subquery>
+
+<exists predicate>    ::=
+	EXISTS  <table subquery>
+
+<unique predicate>    ::=
+	UNIQUE  <table subquery>
+
+<match predicate>    ::= 
+	<value expression>  MATCH  [  UNIQUE  ] [  SIMPLE  |  PARTIAL  |  FULL  ] <table subquery>
+
+<overlaps predicate>    ::=
+	<value expression>  OVERLAPS  <value expression>
+
+<similar predicate>    ::=
+	<character match value> [  NOT  ]  SIMILAR   TO  <similar pattern> [  ESCAPE  <escape character> ]
+
+<distinct predicate>    ::=
+	<value expression>  IS   DISTINCT   FROM  <value expression> 

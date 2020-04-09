@@ -1,0 +1,159 @@
+===============================================================
+=================== SELECT ====================================
+===============================================================
+注：user.pk, address.user_pk都是hashColumn，code_name表没有hashColumn。
+
+---------------------------------------------------------------
+一、只涉及单表的简单查询：
+
+SELECT t.name,
+       t.gender
+  FROM user t
+ WHERE t.pk='123456';
+
+1、如果该表没有hashColumn，则where条件没有限制，随机选择一个数据库去查询。
+2、如果该表有hashColumn，则“where条件”的每条and路径中必须且只能出现一个“hashColumn=value”。
+且“where条件”的每条and路径上的这个“hashColumn=value”必须完全一致，以确定一个数据库去查询。
+
+---------------------------------------------------------------
+二、只涉及单表的嵌套查询：
+
+SELECT t.name,
+       t.gender
+  FROM (
+           SELECT pk,
+                  name,
+                  gender
+             FROM user
+            WHERE pk='123'
+  ) t
+ WHERE t.name='name001';
+
+1、如果该表没有hashColumn，则where条件没有限制，随机选择一个数据库去查询。
+2、如果该表有hashColumn，则“where路径”的每条and路径上必须且只能出现一个“hashColumn=value”，
+且“where路径”的每条and路径上的这个“hashColumn=value”必须完全一致，以确定一个数据库去查询。
+
+---------------------------------------------------------------
+三、涉及多表的嵌套查询：
+
+SELECT t.name,
+       t.gender
+  FROM (
+              SELECT t1.pk,
+                     t1.name,
+                     t1.gender
+                FROM user t1
+           LEFT JOIN address t2
+                  ON t1.pk=t2.user_pk
+               WHERE t1.pk='123'
+  ) t
+ WHERE t.name='name001';
+
+1、如果所有的表均没有hashColumn，则where条件没有限制。
+2、如果表中含有hashColumn，则子查询的规则和多表查询一致。
+
+---------------------------------------------------------------
+四、多表查询：
+
+   SELECT t1.name, 
+          t1.gender, 
+          t2.country, 
+          t2.city, 
+          t3.name AS gender_name, 
+          (
+              SELECT name 
+                FROM (
+                         SELECT name, code, type
+                           FROM code_name t
+                          WHERE t.code=t1.gender
+                            AND t.type='gender'
+                ) t 
+               WHERE t.code=t1.gender 
+                 AND t.type='gender'
+          ) AS gender_name2, 
+          t4.country AS country2, 
+          t4.city AS city2,
+          (
+              SELECT country
+                FROM (
+                         SELECT user_pk, city, country
+                           FROM address t
+                          WHERE t.user_pk=t1.pk
+                ) t
+               WHERE t.city='北京市'
+          ) country3
+     FROM user t1
+LEFT JOIN address t2
+       ON t2.user_pk=t1.pk
+LEFT JOIN code_name t3
+       ON t3.code=t1.gender
+      AND t3.type='gender'
+LEFT JOIN (
+              SELECT t.user_pk, t.country, t.city
+                FROM address t
+               WHERE t.user_pk=t1.pk
+          ) t4
+       ON t4.user_pk=t1.pk
+    WHERE t1.pk='123456'
+      AND t2.city='北京市'
+       OR t1.pk='123456'
+      AND t2.city='上海市';
+
+1、顶层select语句的where条件的限制：
+		where条件的每条and路径上都必须且只能出现一条“hashColumn=value”的条件（其中value必须是参数或字面量），
+	且每条and路径上的“hashColumn=value”必须一致，否则无法在编译期确定查询哪个数据库。
+2、顶层select语句的on条件的限制：
+	2.1、如果join了一张没有hashColumn的表
+		则on条件没有任何限制。
+	2.2、如果join了一张有hashColumn的表
+		则on条件中每条and路径必须且只能出现一条“hashColumn=value”的条件（其中hashColumn必须是该表的一个hashColumn，
+	value必须是where条件中的hashColumn）。同时，每条and路径上的“hashColumn=value”必须一致，否则无法在编译期确定查询
+	哪个数据库。
+3、子查询：
+		如果是单表查询，且该表没有hashColumn，则where条件无限制。
+		如果是单表查询（该表有hashColumn）或join查询，则整个子查询必须遵守顶层select语句的规则。不同的是整个子查询的
+	where路径中的“hashColumn=value”的value必须是顶层select语句的where条件中的hashColumn。on条件和顶层select语句的on条件限制一样。
+
+===============================================================
+=================== INSERT ====================================
+===============================================================
+INSERT INTO user(
+    pk, 
+    name, 
+    gender
+) VALUES(
+    '123456',
+    'name001',
+    'M'
+);
+
+1、如果该表没有hashColumn，则语句无限制。
+2、如果该表有hashColumn，必须指明所有的hashColumn，且所有hashColumn的值都必须是参数或字面量。
+
+===============================================================
+=================== DELETE ====================================
+===============================================================
+DELETE FROM user
+WHERE pk='123456'
+
+1、如果该表没有hashColumn，则语句无限制。
+2、如果该表有hashColumn，必须在每条and路径中指明所有的hashColumn，且所有hashColumn的值都必须是参数或字面量。
+
+===============================================================
+=================== UPDATE ====================================
+===============================================================
+UPDATE user
+   SET pk='654321',
+       name='name002',
+       gender='F'
+ WHERE pk='123456'
+   AND name='name001';
+
+1、如果该表没有hashColumn，则语句无限制。
+2、如果该报有hashColumn，必须在每条and路径中指明所有的hashColumn，且所有hashColumn的值都必须是参数或字面量。
+3、如果修改了hashColumn，则其值也必须是参数或字面量。
+
+
+
+
+

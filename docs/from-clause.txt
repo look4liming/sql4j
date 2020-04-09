@@ -1,0 +1,25 @@
+<table reference>    ::=   
+	<table or query name> [ [  AS  ] <correlation name> |     
+	<left paren> <query expression> <right paren> [  AS  ] <correlation name> |     
+	<left paren> <joined table> <right paren> |
+	<table reference>  CROSS   JOIN  <table primary> | 
+	<table reference> [ <join type> ]  JOIN  <table reference> <join specification> | 
+	<table reference>  NATURAL  [ <join type> ]  JOIN  <table primary> | 
+	<table reference>  UNION   JOIN  <table primary> 
+ 
+<table reference>    ::=   
+	<table primary> |
+	<table reference>  CROSS   JOIN  <table primary> | 
+	<table reference> [ <join type> ]  JOIN  <table reference> <join specification> | 
+	<table reference>  NATURAL  [ <join type> ]  JOIN  <table primary> | 
+	<table reference>  UNION   JOIN  <table primary> 
+
+<table reference>    ::=   
+	<table primary> A
+
+A   ::=
+	CROSS   JOIN  <table primary> A | 
+	[ <join type> ]  JOIN  <table reference> <join specification> A | 
+	NATURAL  [ <join type> ]  JOIN  <table primary> A | 
+	UNION   JOIN  <table primary> A | 
+	e

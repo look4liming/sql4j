@@ -1,0 +1,10 @@
+drop procedure test_proc;
+DELIMITER //
+  CREATE PROCEDURE test_proc(out p_out int, inout p_inout int, in p_in int)
+    BEGIN
+			SET p_out=200000002;
+			set p_inout=1000;
+			set p_in=200;
+    END;
+    //
+DELIMITER ;

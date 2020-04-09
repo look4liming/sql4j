@@ -1,0 +1,125 @@
+<value expression>    ::= 
+         <numeric value expression> |     
+         <string value expression> |     
+         <datetime value expression> |     
+         <interval value expression> |     
+         <user-defined type value expression> |     
+         <row value expression> |     
+         <reference value expression> |     
+         <collection value expression>
+
+<numeric value expression>    ::= 
+         <term> [{<plus sign> | <minus sign>} <term>]...
+
+<string value expression>    ::=   
+		<character factor> [{<concatenation operator> <character factor>}...] | 
+		<left paren> <value expression> <right paren> [ COLLATE  <collation name> ] |
+		<unsigned literal> [ COLLATE  <collation name> ] | 
+		<general value specification> [ COLLATE  <collation name> ] |
+		<identifier chain> [ COLLATE  <collation name> ] |     
+		COUNT  <left paren> <asterisk> <right paren> [ COLLATE  <collation name> ] |
+		AVG <left paren> [ <set quantifier> ] <value expression> <right paren> [ COLLATE  <collation name> ] |
+		MAX <left paren> [ <set quantifier> ] <value expression> <right paren> [ COLLATE  <collation name> ] |
+		MIN <left paren> [ <set quantifier> ] <value expression> <right paren> [ COLLATE  <collation name> ] |
+		SUM <left paren> [ <set quantifier> ] <value expression> <right paren> [ COLLATE  <collation name> ] |
+		EVERY <left paren> [ <set quantifier> ] <value expression> <right paren> [ COLLATE  <collation name> ] |
+		ANY <left paren> [ <set quantifier> ] <value expression> <right paren> [ COLLATE  <collation name> ] |
+		SOME <left paren> [ <set quantifier> ] <value expression> <right paren> [ COLLATE  <collation name> ] |
+		COUNT <left paren> [ <set quantifier> ] <value expression> <right paren> [ COLLATE  <collation name> ] |
+		GROUPING  <left paren> <column reference> <right paren> [ COLLATE  <collation name> ] |
+		<subquery> [ COLLATE  <collation name> ] |
+		NULLIF  <left paren> <value expression> <comma> <value expression> <right paren> [ COLLATE  <collation name> ] |
+		COALESCE  <left paren> <value expression> { <comma> <value expression> }... <right paren> [ COLLATE  <collation name> ] |
+		CASE  <case operand> <simple when clause> ... [ <else clause> ]  END [ COLLATE  <collation name> ] |
+		CASE  <searched when clause> ... [ <else clause> ]  END [ COLLATE  <collation name> ] |
+		<identifier chain> <SQL argument list> [ COLLATE  <collation name> ] |
+		SUBSTRING  <left paren> <character value expression>  FROM  <start position> [  FOR  <string length> ] <right paren> [ COLLATE  <collation name> ] | 
+		SUBSTRING  <left paren> <character value expression>  SIMILAR <character value expression>  ESCAPE  <escape character> <right paren> [ COLLATE  <collation name> ] | 
+		UPPER <left paren> <character value expression> <right paren> [ COLLATE  <collation name> ] |
+		LOWER <left paren> <character value expression> <right paren> [ COLLATE  <collation name> ] |
+		CONVERT  <left paren> <character value expression> USING  <form-of-use conversion name> <right paren> [ COLLATE  <collation name> ] | 
+		TRIM  <left paren> [ [ <trim specification> ] [ <trim character> ]  FROM  ] <trim source> <right paren> [ COLLATE  <collation name> ] | 
+		OVERLAY  <left paren> <character value expression>  PLACING  <character value expression> FROM  <start position> [  FOR  <string length> ] <right paren> [ COLLATE  <collation name> ] | 
+
+<datetime value expression>    ::= 
+         <datetime primary> [ AT { LOCAL  |  TIME   ZONE  <interval primary> } ] |     
+         <interval value expression> <plus sign> <datetime primary> [ AT { LOCAL  |  TIME   ZONE  <interval primary> } ] |     
+         <datetime value expression> <plus sign> <interval term> |     
+         <datetime value expression> <minus sign> <interval term>
+
+<interval value expression>    ::= 
+         <interval term> |     
+         <interval value expression 1> <plus sign> <interval term 1> |     
+         <interval value expression 1> <minus sign> <interval term 1> |     
+         <left paren> <datetime value expression> <minus sign> <datetime term> <right paren> <interval qualifier> 
+
+<user-defined type value expression>    ::=   
+		<left paren> <value expression> <right paren> |
+		<unsigned value specification> |     
+		<identifier chain> |     
+		<set function specification> |     
+		<subquery> |     
+		<case expression> |     
+		<cast specification> |     
+		<subtype treatment> |     
+		<attribute or method reference> |
+		<reference resolution> |     
+		<collection value constructor> |
+		<routine invocation> |
+		<field reference> |     
+		<element reference> |     
+		<method invocation> |     
+		<static method invocation> |     
+		<new specification> 
+
+<row value expression>    ::=   
+		[ <sign> ] <unsigned numeric literal> | 
+		<quote> [ <character representation> ... ] <quote> |
+		DATE  <date string> | 
+		TIME  <time string>  | 
+		TIMESTAMP  <timestamp string> |
+		INTERVAL  [ <sign> ] <interval string> <interval qualifier> |
+		<identifier chain> |
+		CURRENT_DEFAULT_TRANSFORM_GROUP  |      
+		CURRENT_PATH  |      
+		CURRENT_ROLE  |      
+		CURRENT_TRANSFORM_GROUP_FOR_TYPE  <user-defined type> |      
+		CURRENT_USER  |      
+		SESSION_USER  |      
+		SYSTEM_USER  |      
+		USER  |      
+		VALUE  |
+		<subquery>
+
+<case expression>    ::=   
+		NULLIF  <left paren> <value expression> <comma> <value expression> <right paren> |
+		COALESCE  <left paren> <value expression> { <comma> <value expression> }... <right paren> | 
+		CASE  <case operand> <simple when clause> ... [ <else clause> ]  END | 
+		CASE  <searched when clause> ... [ <else clause> ]  END
+
+<term>    ::= 
+        [ <sign> ] <numeric primary> [{{<asterisk> | <solidus> } <factor>}...]
+
+<datetime primary>    ::=   
+		<left paren> <value expression> <right paren> |  
+		<unsigned value specification> |     
+		<column reference> |     
+		<set function specification> |     
+		<scalar subquery> |     
+		<case expression> |     
+		<cast specification> |     
+		<subtype treatment> |     
+		<attribute or method reference> |     
+		<reference resolution> |     
+		<collection value constructor> |     
+		<routine invocation> |     
+		<field reference> |     
+		<element reference> |     
+		<method invocation> |     
+		<static method invocation> |     
+		<new specification> |
+		CURRENT_DATE  |     
+		CURRENT_TIME  [ <left paren> <time precision> <right paren> ] |     
+		CURRENT_TIMESTAMP  [ <left paren> <timestamp precision> <right paren> ] |     
+		LOCALTIME  [ <left paren> <time precision> <right paren> ] |     
+		LOCALTIMESTAMP  [ <left paren> <timestamp precision> <right paren> ]

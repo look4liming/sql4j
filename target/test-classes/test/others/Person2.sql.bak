@@ -1,0 +1,123 @@
+
+
+-------------[select001]------------
+
+select t2.name,t.abc,'男' as gender,count(1) cnt,'111111' as name
+from 
+person t3
+left join
+(
+	select 1 name,2 abc 
+	from tab_1 
+	left join (
+		select name,t.name abc from person t where t.name='111111'
+	) t on t.name=tab_1.name
+	where t.name='111111'
+) t on t.abc=t3.name
+left join person t2 on t.name=t2.name
+inner join person t4 on t4.gender=t3.gender
+where t2.name='111111' 
+and char_length(trim(t.abc))=100
+or 1=2 and t2.name='111111'
+group by t2.name,t.abc,gender
+having count(1)>=0
+order by 1-100, trim(t2.gender), case when 1>2 then 1 else 2 end;
+
+insert into person(name,gender) 
+values('name0011','F');
+
+delete from person where name='name0011' and gender='F';
+
+--insert into person(pk,name,gender) values('1234','name0011','F');
+
+select t.name, t.abc from (
+	select name, abc from (
+		select t.name,111 abc from person t
+		where t.name='F'
+	) t1 where t1.name='F'
+) t left join tab_1 on t.name=tab_1.abc where 'F'=   t.name;
+
+select name from person t where t.name='123456';
+
+update person set city=current_timestamp 
+where name='name0011' 
+and gender='F' 
+or name='name0011' 
+and gender='F'
+and gender>'f111'
+and city in(1,'2*10', 222);
+
+update person set city=?city123, city='上海市' 
+where ((name='123' is true) is true and gender='F' is true) is      true;
+
+delete from person 
+where name='name0011' 
+and gender='F' 
+or name='name0011' 
+and 'F'=gender
+and gender>'f111'
+and city in(1,'2*10', 222);
+
+delete from person 
+where name='name0011' 
+and '1'= gender;
+
+delete from tab_1 where abc='123';
+
+select tab_1.name,tab_1.abc 
+from tab_1;
+
+delete from person where name='123456===' and gender='男' is true;
+delete from person where name='123456===' and gender='女';
+insert into person(name,gender,country,city) values('123456===','9',?country2,?city2);
+select name,gender,'111' city,current_date as birthdate from person where pk=?aaaaabbbbccc   and name='123456===' ;
+delete from  person where name='123456===' and gender='9';
+
+select 1 name, 2 gender 
+from tab_1 t 
+where t.a=upper('?acd') 
+and   t.a =?xyzzzz 
+and t.b=?aaa111 
+and t.c=?uop 
+and t.d=?gggggg
+and t.name='123456===' is not true
+and t.name=-1;
+
+create table xyz(
+	pk varchar(100) primary key,
+	name char(60) default '123' unique,
+	gender char(10),
+	constraint xyz_unique unique(name, gender),
+	country varchar(1000),
+	a numeric(10,2),
+	b numeric(10,0),
+	c numeric(+10,1),
+	d numeric(+    10,5),
+	e int,
+	f smallint,
+	g DECIMAL(10,3),
+	h REAL
+);
+create unique index idx_c_d_e_f on xyz(c,d ,e,f);
+create index idx_g_h on xyz(g,h );
+drop index xyz.idx_c_d_e_f;
+drop index xyz.idx_g_h;
+
+alter table xyz add column aaa123 varchar(100) default 'AAABBBCCC' unique;
+alter table xyz alter column aaa123 set default 'EEEFFFGGG';
+alter table xyz alter column aaa123 drop default;
+alter table xyz add constraint efg unique(f, g ,h);
+--alter table xyz drop constraint efg;
+alter table xyz drop column aaa123;
+alter table xyz drop primary key;
+alter table xyz add primary key(name);
+alter table xyz modify h varchar(100) not null;
+alter table xyz modify h varchar(120) null;
+--alter table xyz drop index xyz_unique;
+drop index xyz.xyz_unique;
+
+drop table xyz;
+
+--[xxxxxxxxxxxxxx]--
+select tab_1.name,tab_1.abc 
+from tab_1;

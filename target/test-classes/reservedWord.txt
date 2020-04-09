@@ -1,0 +1,31 @@
+double_quote "|
+percent    %| 
+ampersand &|
+quote '|
+left_paren (  |
+right_paren ) |
+asterisk * |
+plus_sign + |
+comma , |
+minus_sign - |
+period . |
+solidus / |
+colon : |
+semicolon ; |
+less_than_operator < |
+equals_operator = |
+greater_than_operator > |
+question_mark ? |
+not_equals_operator <> |
+less_than_or_equals_operator <= |
+concatenation_operator xxxxxxxxxxxxxxxxxxxxxxxxxxxxx | 
+right_arrow -> |
+double_colon :: |
+double_period .. |
+left_bracket [ |
+right_bracket ] |
+left_brace { |
+right_brace } |
+circumflex ^ |
+underscore _ |
+vertical_bar xxxxxxxxxxxxxxxxxxxxxx |
